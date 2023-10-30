@@ -356,8 +356,13 @@ int main(int argc, char *argv[]) {
 	PLog::Init(PLog::ALL, PFile::Path(""));
 	
 	set_paths();
-	
+
+#ifdef __EMSCRIPTEN__
+	PLog::Init(PLog::INFO, PFile::Path(""));
+	PLog::Write(PLog::INFO, "PK2", "WebAssembly build by Gregory Maynard-Hoare");
+#else
 	PLog::Init(PLog::ALL, PFile::Path(data_path + "log.txt"));
+#endif
 	
 	log_data();
 	

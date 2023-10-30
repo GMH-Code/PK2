@@ -17,7 +17,9 @@ enum SCREEN {
 	SCREEN_SCORING,
 	SCREEN_END,
 
-	SCREEN_LUA,
+#ifndef __EMSCRIPTEN__
+	SCREEN_LUA
+#endif
 };
 
 extern int current_screen;
@@ -36,7 +38,9 @@ int Screen_Map_Init();
 int Screen_InGame_Init();
 int Screen_ScoreCount_Init();
 int Screen_Ending_Init();
+#ifndef __EMSCRIPTEN__
 int Screen_Lua_Init();
+#endif
 
 int Screen_Intro();
 int Screen_Menu();
@@ -44,7 +48,9 @@ int Screen_Map();
 int Screen_InGame();
 int Screen_ScoreCount();
 int Screen_Ending();
+#ifndef __EMSCRIPTEN__
 int Screen_Lua();
+#endif
 
 int Screen_First_Start();
 int Screen_Loop();

@@ -73,7 +73,11 @@ void Settings_Init() {
 	Settings.bg_sprites = true;
 
 	Settings.fps = SETTINGS_60FPS;//SETTINGS_VSYNC;
+#ifdef __EMSCRIPTEN__
+	Settings.isFullScreen = false;
+#else
 	Settings.isFullScreen = true;
+#endif
 	Settings.double_speed = false;
 	Settings.shader_type = SETTINGS_MODE_LINEAR;
 

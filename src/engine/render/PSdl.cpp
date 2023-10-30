@@ -67,6 +67,10 @@ int PSdl::set_shader(int mode) {
 
 int PSdl::set_vsync(bool set) {
 
+#ifdef __EMSCRIPTEN__
+    return -1;
+#endif
+
     if (renderer) {
 
         ui_texture = NULL;
@@ -148,14 +152,27 @@ PSdl::PSdl(int width, int height, void* window) {
 
     curr_window = (SDL_Window*)window;
 
-    renderer = SDL_CreateRenderer(curr_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    renderer = SDL_CreateRenderer(curr_window, -1,
+#ifdef __EMSCRIPTEN__
+        0  // Use accelerated rendering if available, otherwise use software
+#else
+        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
+#endif
+    );
+
     if (!renderer) {
 
         PLog::Write(PLog::FATAL, "PSdl", "Couldn't create renderer!");
 
     }
 
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY,
+#ifdef __EMSCRIPTEN__
+        "0"
+#else
+        "2"
+#endif
+    );
 
     SDL_RenderClear(renderer);
 
@@ -163,7 +180,11 @@ PSdl::PSdl(int width, int height, void* window) {
 
 PSdl::~PSdl() {
 
-    SDL_DestroyRenderer(renderer);
+    if (renderer) {
+        SDL_DestroyRenderer(renderer);
+        renderer = nullptr;
+    }
+
     SDL_FreeSurface(ui_surface);
     PLog::Write(PLog::DEBUG, "PSdl", "Terminated");
 

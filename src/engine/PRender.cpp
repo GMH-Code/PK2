@@ -8,7 +8,7 @@
 #include "engine/PLog.hpp"
 #include "engine/types.hpp"
 
-#ifndef __ANDROID__
+#if !(defined(__ANDROID__) || defined(__EMSCRIPTEN__))
 #include "engine/render/PGl.hpp"
 #include "engine/render/PSdlSoft.hpp"
 #endif
@@ -204,7 +204,7 @@ int init(int width, int height, const char* name, const char* icon, int render_m
 	if (render_method == RENDERER_DEFAULT) {
 
 		// TODO choose renderer
-		#ifdef __ANDROID__
+		#if defined(__ANDROID__) || defined(__EMSCRIPTEN__)
 
 		render_method = RENDERER_SDL;
 
@@ -240,7 +240,19 @@ int init(int width, int height, const char* name, const char* icon, int render_m
 
 	}
 
-    #else
+	#elif __EMSCRIPTEN__
+
+	window = SDL_CreateWindow(name, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, window_flags);
+
+	if (!window) {
+		PLog::Write(PLog::FATAL, "PRender", "Couldn't create window!");
+		return -2;
+	}
+
+	fullscreen_mode = SDL_WINDOW_FULLSCREEN;
+	SDL_ShowCursor(SDL_DISABLE);
+
+	#else
 
 	// create a temporary window to check if GLSL 1.4 is supported
 	// TODO 1.5 - Solve this and warn with SDL Info 
@@ -319,7 +331,7 @@ int init(int width, int height, const char* name, const char* icon, int render_m
 
 		case RENDERER_SDL:
 			renderer = new PSdl(width, height, window); break;
-    #ifndef __ANDROID__
+    #if !(defined(__ANDROID__) || defined(__EMSCRIPTEN__))
 		case RENDERER_SDL_SOFTWARE:
 			renderer = new PSdlSoft(width, height, window); break;
 		case RENDERER_OPENGL:
@@ -349,10 +361,10 @@ int init(int width, int height, const char* name, const char* icon, int render_m
 
 void terminate() {
 
-	SDL_DestroyWindow(window);
-
 	delete renderer;
 	renderer = nullptr;
+
+	SDL_DestroyWindow(window);
 
 }
 

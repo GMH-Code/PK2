@@ -859,11 +859,13 @@ int Screen_InGame(){
 				Game->Change_SkullBlocks();
 				key_delay = 20;
 			}
+#ifndef __EMSCRIPTEN__
 			if (PInput::Keydown(PInput::W)) {
 				Settings.isFullScreen = !Settings.isFullScreen;
 				PRender::set_fullscreen(Settings.isFullScreen);
 				key_delay = 20;
 			}
+#endif
 			if (PInput::Keydown(PInput::I)) {
 				draw_debug_info = !draw_debug_info;
 				key_delay = 20;

@@ -19,6 +19,10 @@
 
 #include <SDL.h>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 #ifdef PK2_USE_ZIP
 #include <zip.h>
 #endif
@@ -322,7 +326,7 @@ bool Path::NoCaseFind() {
 		if(PUtils::NoCaseCompare(name.c_str(), filename.c_str())) {
 
 			this->SetFile(name);
-			PLog::Write(PLog::DEBUG, "PFile", "Found on %s", this->path.c_str());
+			PLog::Write(PLog::INFO, "PFile", "Found on %s", this->path.c_str());
 
 			return true;
 		}
@@ -558,12 +562,12 @@ bool Path::Find() {
 	struct stat buffer;
 	if(stat(cstr, &buffer) == 0) {
 
-		PLog::Write(PLog::DEBUG, "PFile", "Found on %s", cstr);
+		PLog::Write(PLog::INFO, "PFile", "Found %s", cstr);
 		return true;
 
 	}
 
-	PLog::Write(PLog::INFO, "PFile", "%s not found, trying different cAsE", cstr);
+	PLog::Write(PLog::DEBUG, "PFile", "%s not found, trying different cAsE", cstr);
 	
 	return this->NoCaseFind();
 	
@@ -688,6 +692,10 @@ static int SDLCALL pfile_zip_close(SDL_RWops* context) {
 //-------------------------
 
 RW* Path::GetRW(const char* mode) {
+
+#ifdef __EMSCRIPTEN__
+	emscripten_sleep(0);
+#endif
 
 	SDL_RWops* ret;
 

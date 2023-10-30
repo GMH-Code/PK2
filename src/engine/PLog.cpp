@@ -14,14 +14,25 @@
 #include <string>
 #endif
 
+#ifndef __EMSCRIPTEN__
 #include <SDL_mutex.h>
+#endif
 
+#ifdef __EMSCRIPTEN__
+#define ANSI_COLOR_BLUE    ""
+#define ANSI_COLOR_GREEN   ""
+#define ANSI_COLOR_YELLOW  ""
+#define ANSI_COLOR_RED     ""
+#define ANSI_COLOR_FATAL   ""
+#define ANSI_COLOR_RESET   ""
+#else
 #define ANSI_COLOR_BLUE    "\x1b[34m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
 #define ANSI_COLOR_YELLOW  "\x1b[33m"
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_FATAL   "\x1b[41m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
+#endif
 
 #ifdef _WIN32
 #define END_LINE "\r\n"
@@ -35,26 +46,30 @@ static PFile::RW* log_file = NULL;
 static u8 log_level = 0;
 static bool print_to_stdout = false;
 
+#ifndef __EMSCRIPTEN__
 static SDL_mutex* mutex = NULL;
+#endif
 
 void Init(u8 level, PFile::Path file) {
 
+    log_level = level;
+
+#ifndef __EMSCRIPTEN__
     if (mutex == NULL)
         mutex = SDL_CreateMutex();
 
-    log_level = level;
-
     if (log_file != NULL)
         log_file->close();
-    
+
     log_file = NULL;
 
     if (file.GetFileName().size() > 0)
         log_file = file.GetRW("w");
-    
-    #ifndef _WIN32
-		print_to_stdout = true;
-    #endif
+#endif
+
+#ifndef _WIN32
+    print_to_stdout = true;
+#endif
 
 }
 
@@ -89,7 +104,9 @@ void Write(u8 level, const char* origin, const char* format, ...) {
     if (!(log_level & level))
         return;
 
+#ifndef __EMSCRIPTEN__
     SDL_LockMutex(mutex);
+#endif
 
     /*time_t rawtime;
     time (&rawtime);
@@ -162,7 +179,9 @@ void Write(u8 level, const char* origin, const char* format, ...) {
     
     va_end(args);
 
+#ifndef __EMSCRIPTEN__
     SDL_UnlockMutex(mutex);
+#endif
 
 }
 
@@ -170,9 +189,11 @@ void Exit() {
 
     Write(DEBUG, "PLog", "Terminated");
 
+#ifndef __EMSCRIPTEN__
     SDL_DestroyMutex(mutex);
     mutex = NULL;
-    
+#endif
+
     if (log_file != NULL)
         log_file->close();
 

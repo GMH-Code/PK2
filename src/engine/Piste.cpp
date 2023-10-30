@@ -10,6 +10,10 @@
 
 #include <iostream>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 #define UPDATE_FPS 30 //Update FPS each 30 frames
 
 namespace Piste {
@@ -43,7 +47,11 @@ static void wait_frame() {
 	u64 wait_time = exit_time - curr_time;
 	u32 ms = wait_time * 1000 / c_frec;
 
+#ifdef __EMSCRIPTEN__
+	emscripten_sleep(ms);
+#else
 	SDL_Delay(ms);
+#endif
 
 	while(1) {
 
@@ -116,10 +124,15 @@ static void sdl_show_version() {
 
 
 void init(int width, int height, const char* name, const char* icon, int render_method, int audio_buffer_size, bool audio_multi_thread) {
-	
-	u32 flags = SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS | \
-                SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER /*| SDL_INIT_SENSOR*/;
-	
+
+	u32 flags = SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS;
+
+#ifdef __EMSCRIPTEN__
+	SDL_SetHint(SDL_HINT_EMSCRIPTEN_ASYNCIFY, "0");
+#else
+	flags |= SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER /*| SDL_INIT_SENSOR*/;
+#endif
+
 	if (SDL_Init(flags) < 0) {
 
 		PLog::Write(PLog::FATAL, "Piste", "Unable to init SDL: %s", SDL_GetError());
