@@ -3,14 +3,32 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Emscripten-Generated Code</title>
+    <title>Pekka Kana 2</title>
     <style>
+      body {
+        background-color: black;
+        color: white;
+        font-family: Arial,Helvetica,sans-serif;
+        margin: 0px;
+      }
       .emscripten { padding-right: 0; margin-left: auto; margin-right: auto; display: block; }
-      textarea.emscripten { font-family: monospace; width: 80%; }
       div.emscripten { text-align: center; }
-      div.emscripten_border { border: 1px solid black; }
       /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
-      canvas.emscripten { border: 0px none; background-color: black; }
+      canvas.emscripten {
+        border: 0px none;
+        background-color: black;
+        width: calc(min(100vw, 100vh * 5 / 3));
+        height: calc(min(100vh, 100vw * 0.6));
+        margin-top: calc(0.5 * (100vh - (min(100vh, 100vw * 0.6))));
+        display: none;
+      }
+      @supports (height: 1dvh) {
+        canvas.emscripten {
+          width: calc(min(100dvw, 100dvh * 5 / 3));
+          height: calc(min(100dvh, 100dvw * 0.6));
+          margin-top: calc(0.5 * (100dvh - (min(100dvh, 100dvw * 0.6))));
+        }
+      }
 
       .spinner {
         height: 50px;
@@ -20,12 +38,12 @@
         -moz-animation: rotation .8s linear infinite;
         -o-animation: rotation .8s linear infinite;
         animation: rotation 0.8s linear infinite;
-        border-left: 10px solid rgb(0,150,240);
-        border-right: 10px solid rgb(0,150,240);
-        border-bottom: 10px solid rgb(0,150,240);
-        border-top: 10px solid rgb(100,0,200);
+        border-left: 10px solid rgb(92,37,169);
+        border-right: 10px solid rgb(92,37,169);
+        border-bottom: 10px solid rgb(92,37,169);
+        border-top: 10px solid rgb(252,80,100);
         border-radius: 100%;
-        background-color: rgb(200,100,250);
+        background-color: black;
       }
       @-webkit-keyframes rotation {
         from {-webkit-transform: rotate(0deg);}
@@ -47,59 +65,34 @@
     </style>
   </head>
   <body>
-    <hr/>
-    <figure style="overflow:visible;" id="spinner"><div class="spinner"></div><center style="margin-top:0.5em"><strong>emscripten</strong></center></figure>
+    <figure style="overflow:visible;" id="spinner"><div class="spinner"></div><center style="margin-top:0.5em"><strong>Pekka Kana 2</strong></center></figure>
+    <div class="emscripten" id="quit" style="margin:8px; display:none"></div>
     <div class="emscripten" id="status">Downloading...</div>
     <div class="emscripten">
       <progress value="0" max="100" id="progress" hidden=1></progress>  
     </div>
-    <div class="emscripten_border">
-      <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
-    </div>
-    <hr/>
-    <div class="emscripten">
-      <input type="checkbox" id="resize">Resize canvas
-      <input type="checkbox" id="pointerLock" checked>Lock/hide mouse pointer
-      &nbsp;&nbsp;&nbsp;
-      <input type="button" value="Fullscreen" onclick="Module.requestFullscreen(document.getElementById('pointerLock').checked, 
-                                                                                document.getElementById('resize').checked)">
-    </div>
-    
-    <hr/>
-    <textarea class="emscripten" id="output" rows="8"></textarea>
-    <hr>
+    <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" tabindex=-1></canvas>
+
     <script type='text/javascript'>
       var statusElement = document.getElementById('status');
       var progressElement = document.getElementById('progress');
       var spinnerElement = document.getElementById('spinner');
+      var canvasElement = document.getElementById('canvas');
 
       var Module = {
         print: (function() {
-          var element = document.getElementById('output');
-          if (element) element.value = ''; // clear browser cache
           return function(text) {
             if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
-            // These replacements are necessary if you render to raw HTML
-            //text = text.replace(/&/g, "&amp;");
-            //text = text.replace(/</g, "&lt;");
-            //text = text.replace(/>/g, "&gt;");
-            //text = text.replace('\n', '<br>', 'g');
             console.log(text);
-            if (element) {
-              element.value += text + "\n";
-              element.scrollTop = element.scrollHeight; // focus on bottom
-            }
           };
         })(),
         canvas: (() => {
-          var canvas = document.getElementById('canvas');
-
           // As a default initial behavior, pop up an alert when webgl context is lost. To make your
           // application robust, you may want to override this behavior before shipping!
           // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
-          canvas.addEventListener("webglcontextlost", (e) => { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+          canvasElement.addEventListener("webglcontextlost", (e) => { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
 
-          return canvas;
+          return canvasElement;
         })(),
         setStatus: (text) => {
           if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
@@ -127,6 +120,15 @@
         monitorRunDependencies: (left) => {
           this.totalDependencies = Math.max(this.totalDependencies, left);
           Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+        },
+        onRuntimeInitialized: () => {
+          canvasElement.style.display = 'block';
+        },
+        onExit: (status) => {
+          const quitElement = document.getElementById('quit');
+          quitElement.innerHTML = status === 0 ? 'Pekka Kana 2 has exited.' : 'Pekka Kana 2 exited with code ' + status;
+          quitElement.style.display = 'block';
+          canvasElement.style.display = 'none';
         }
       };
       Module.setStatus('Downloading...');

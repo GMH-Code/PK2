@@ -29,7 +29,7 @@ SHAREDFLAGS = -sUSE_SDL=2 -sUSE_SDL_MIXER=2 -sSDL2_MIXER_FORMATS='["wav","mod"]'
               -sUSE_SDL_IMAGE=2 -sSDL2_IMAGE_FORMATS='["bmp","png"]'
 CXXFLAGS += $(SHAREDFLAGS)
 LDFLAGS += $(SHAREDFLAGS) -sASYNCIFY -sASYNCIFY_IGNORE_INDIRECT -sINITIAL_MEMORY=32MB -sTOTAL_STACK=1MB \
-           -sALLOW_MEMORY_GROWTH --shell-file wasm/shell.html \
+           -sALLOW_MEMORY_GROWTH --shell-file wasm/shell.html -sEXIT_RUNTIME=1 \
            --preload-file=res/episodes --preload-file=res/gfx/scenery --preload-file=res/gfx/tiles \
            --preload-file=res/gfx/ending.bmp --preload-file=res/gfx/intro.bmp --preload-file=res/gfx/map.bmp \
            --preload-file=res/gfx/menu.bmp --preload-file=res/gfx/pk2stuff.bmp --preload-file=res/gfx/pk2stuff2.png \
