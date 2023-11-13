@@ -165,7 +165,7 @@ int PK_Draw_Map() {
 
 			// if clicked
 			if (paluu == 2) {
-				if (type != 2 || dev_mode) {
+				if (type != 2 || unlock_levels) {
 
 					Game = new GameClass(i);
 					

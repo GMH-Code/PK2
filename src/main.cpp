@@ -180,7 +180,13 @@ static void read_args(int argc, char *argv[]) {
 		}
 		if (strcmp(argv[i], "dev") == 0) {
 			dev_mode = true;
+			unlock_levels = true;
 			Piste::set_debug(true);
+			continue;
+		}
+		else if (strcmp(argv[i], "unlock") == 0) {
+			unlock_levels = true;
+			continue;
 		}
 		else if (strcmp(argv[i], "test") == 0) {
 			if (argc <= i + 1) {
@@ -219,9 +225,11 @@ static void read_args(int argc, char *argv[]) {
 		}
 		else if (strcmp(argv[i], "mobile") == 0) {
 			PUtils::Force_Mobile();
+			continue;
 		}
 		else if (strcmp(argv[i], "editor") == 0) {
 			editor = true;
+			continue;
 		}
 		else {
 			printf("Invalid arg\n");
