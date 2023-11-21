@@ -273,7 +273,7 @@ int  Draw_Radio(int x, int y, int num, int sel) {
 }
 
 void Draw_Menu_Main() {
-	int my = PUtils::Is_Mobile()? 260 : 240;//250;
+	int my = PUtils::Is_Mobile() ? 260 : (PUtils::Is_Touchscreen() ? 220 : 240);  // 250;
 
 	Draw_BGSquare(160, 200, 640-180, 410, 224);
 
@@ -292,11 +292,16 @@ void Draw_Menu_Main() {
 		strcpy(menu_name, tekstit->Get_Text(PK_txt.player_default_name));
 		menu_name_index = strlen(menu_name);
 		menu_name_last_mark = ' ';
-		
-		editing_name = true;
-		PInput::StartKeyboard();
 
-		menu_nyt = MENU_NAME;
+		if (PUtils::Is_Touchscreen() && !PUtils::Is_Mobile()) {
+			// Touchscreen, but not running on Android, so bypass name screen
+			menu_nyt = MENU_EPISODES;
+		} else {
+			editing_name = true;
+			PInput::StartKeyboard();
+			menu_nyt = MENU_NAME;
+		}
+
 		key_delay = 30;
 	}
 	my += 20;
@@ -342,7 +347,7 @@ void Draw_Menu_Main() {
 	}
 	my += 20;
 
-	if (PUtils::Is_Mobile() && Game) {
+	if (PUtils::Is_Touchscreen() && Game) {
 		if (Draw_Menu_Text("map",180,my)) {
 			next_screen = SCREEN_MAP;
 			delete Game;
@@ -1127,7 +1132,7 @@ void Draw_Menu_Controls() {
 	}
 	my += 20;
 
-	if (PUtils::Is_Mobile()) {
+	if (PUtils::Is_Touchscreen()) {
 
 		if (Settings.gui) {
 			if (Draw_Menu_Text("turn off gui",100,my)) {
@@ -1403,7 +1408,7 @@ int Draw_Menu() {
 		PDraw::font_write(fontti1, PK2_VERSION, 0, 470);
 
 	if (!mouse_hidden)
-		if (!PUtils::Is_Mobile() || !Settings.gui)
+		if (!PUtils::Is_Touchscreen() || !Settings.gui)
 			Draw_Cursor(PInput::mouse_x, PInput::mouse_y);
 
 	return 0;
@@ -1414,7 +1419,7 @@ int Draw_Menu() {
 
 int Screen_Menu_Init() {
 
-	if(PUtils::Is_Mobile())
+	if(PUtils::Is_Touchscreen())
 		GUI_Change(UI_CURSOR);
 	
 	PDraw::set_offset(640, 480);

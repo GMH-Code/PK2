@@ -24,7 +24,9 @@ void Show_Error(const char* txt);
 void GetLanguage(char* lang);
 
 void Force_Mobile();
+void Force_Touchscreen();
 bool Is_Mobile();
+bool Is_Touchscreen();
 int Alphabetical_Compare(const char *a, const char *b);
 bool NoCaseCompare(const char* a, const char* b);
 

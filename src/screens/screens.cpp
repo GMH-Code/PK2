@@ -87,7 +87,7 @@ int Screen_First_Start() {
 
 	Fadetext_Init();
 
-	if(PUtils::Is_Mobile())
+	if(PUtils::Is_Touchscreen())
 		GUI_Load();
 
 	tekstit = new PLang();
@@ -229,7 +229,7 @@ int Screen_Loop() {
 	bool relative = Settings.isFullScreen;
 	PInput::UpdateMouse(keys_move, relative);
 	
-	if (PUtils::Is_Mobile())
+	if (PUtils::Is_Touchscreen())
 		GUI_Update();
 
 	switch (current_screen) {

@@ -290,7 +290,7 @@ int Screen_Map_Init() {
 		return 1;
 	}
 
-	if(PUtils::Is_Mobile())
+	if(PUtils::Is_Touchscreen())
 		GUI_Change(UI_CURSOR);
 
 	mouse_hidden = false;
@@ -353,7 +353,7 @@ int Screen_Map() {
 
 	} else {
 	
-		if (!PUtils::Is_Mobile() || !Settings.gui)
+		if (!PUtils::Is_Touchscreen() || !Settings.gui)
 			Draw_Cursor(PInput::mouse_x, PInput::mouse_y);
 
 	}

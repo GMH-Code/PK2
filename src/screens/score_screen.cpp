@@ -263,7 +263,7 @@ int Draw_ScoreCount() {
 
 	}
 
-	if (!PUtils::Is_Mobile() || !Settings.gui)
+	if (!PUtils::Is_Touchscreen() || !Settings.gui)
 		Draw_Cursor(PInput::mouse_x, PInput::mouse_y);
 
 	return 0;
@@ -272,7 +272,7 @@ int Draw_ScoreCount() {
 
 int Screen_ScoreCount_Init() {
 
-	if(PUtils::Is_Mobile())
+	if(PUtils::Is_Touchscreen())
 		GUI_Change(UI_CURSOR);
 	
 	PDraw::set_offset(640, 480);

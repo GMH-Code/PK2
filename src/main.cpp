@@ -153,7 +153,7 @@ static void quit() {
 
 	PSound::stop_music();
 
-	if (PUtils::Is_Mobile())
+	if (PUtils::Is_Touchscreen())
 		GUI_Exit();
 
 	if (Game)
@@ -225,6 +225,11 @@ static void read_args(int argc, char *argv[]) {
 		}
 		else if (strcmp(argv[i], "mobile") == 0) {
 			PUtils::Force_Mobile();
+			PUtils::Force_Touchscreen();
+			continue;
+		}
+		else if (strcmp(argv[i], "touchscreen") == 0) {
+			PUtils::Force_Touchscreen();
 			continue;
 		}
 		else if (strcmp(argv[i], "editor") == 0) {

@@ -59,7 +59,7 @@ int Screen_Lua_Init() {
     if (Load_Lua() != 0)
         return -1;
 
-	if(PUtils::Is_Mobile())
+	if(PUtils::Is_Touchscreen())
 		GUI_Change(UI_TOUCH_TO_START);
 
 	PDraw::set_offset(640, 480);

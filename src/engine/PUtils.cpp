@@ -22,6 +22,7 @@
 namespace PUtils {
 
 bool force_mobile = false;
+bool force_touchscreen = false;
 
 void Setcwd() {
 
@@ -195,12 +196,28 @@ void Force_Mobile() {
 
 }
 
+void Force_Touchscreen() {
+
+	force_touchscreen = true;
+
+}
+
 bool Is_Mobile() {
 
 	#ifdef __ANDROID__
 		return true;
 	#else
 		return force_mobile;
+	#endif
+
+}
+
+bool Is_Touchscreen() {
+
+	#ifdef __ANDROID__
+		return true;
+	#else
+		return force_touchscreen;
 	#endif
 
 }

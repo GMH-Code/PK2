@@ -598,7 +598,7 @@ int Draw_InGame() {
 
 int Screen_InGame_Init(){
 
-	if(PUtils::Is_Mobile()) {
+	if(PUtils::Is_Touchscreen()) {
 		if (Settings.gui)
 			GUI_Change(UI_GAME_BUTTONS);
 		else 
@@ -626,7 +626,7 @@ int Update_Camera(){
 	Game->camera_x = (int)Player_Sprite->x-screen_width / 2;
 	Game->camera_y = (int)Player_Sprite->y-screen_height / 2;
 	
-	if(dev_mode && PInput::MouseLeft() && !PUtils::Is_Mobile()) {
+	if(dev_mode && PInput::MouseLeft() && !PUtils::Is_Touchscreen()) {
 		Game->camera_x += PInput::mouse_x - screen_width / 2;
 		Game->camera_y += PInput::mouse_y - screen_height / 2;
 	}

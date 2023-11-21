@@ -120,7 +120,7 @@ int Draw_EndGame(){
 
 int Screen_Ending_Init() {
 	
-	if(PUtils::Is_Mobile())
+	if(PUtils::Is_Touchscreen())
 		GUI_Change(UI_TOUCH_TO_START);
 	
 	PDraw::set_offset(640, 480);

@@ -33,7 +33,8 @@ LDFLAGS += $(SHAREDFLAGS) -sASYNCIFY -sASYNCIFY_IGNORE_INDIRECT -sINITIAL_MEMORY
            --preload-file=res/episodes --preload-file=res/gfx/scenery --preload-file=res/gfx/tiles \
            --preload-file=res/gfx/ending.bmp --preload-file=res/gfx/intro.bmp --preload-file=res/gfx/map.bmp \
            --preload-file=res/gfx/menu.bmp --preload-file=res/gfx/pk2stuff.bmp --preload-file=res/gfx/pk2stuff2.png \
-           --preload-file=res/language --preload-file=res/music --preload-file=res/sfx --preload-file=res/sprites
+           --preload-file=res/language --preload-file=res/music --preload-file=res/sfx --preload-file=res/sprites \
+           --preload-file=res/mobile
 else
 # SDL2:
 CXXFLAGS += $(shell pkg-config sdl2 --cflags)
