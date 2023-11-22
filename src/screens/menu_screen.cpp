@@ -605,8 +605,12 @@ void Draw_Menu_Save() {
 		else
 			strcat(number, saves_list[i].name);
 
-		if (Draw_Menu_Text(number,100,150+my))
+		if (Draw_Menu_Text(number,100,150+my)) {
 			Save_Record(i);
+#ifdef __EMSCRIPTEN__
+			wasm_sync_fs();
+#endif
+		}
 
 		if (!saves_list[i].empty) {
 

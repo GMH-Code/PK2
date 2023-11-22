@@ -325,6 +325,10 @@ int Screen_ScoreCount_Init() {
 	// Save backup when finishing a level
 	Save_Record(10);
 
+#ifdef __EMSCRIPTEN__
+	wasm_sync_fs();
+#endif
+
 	PSound::set_musicvolume(Settings.music_max_volume);
 
 	going_to_map = false;

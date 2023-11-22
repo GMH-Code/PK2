@@ -28,6 +28,10 @@
 
 #include <SDL.h>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 static const char default_config[] = 
 "-- Render Method"
 "\r\n-- Possible options: sdl software opengl opengles default"
@@ -250,7 +254,11 @@ static void set_paths() { // Todo - move to the engine
 	
 	#ifndef __ANDROID__
 
-	#ifdef PK2_PORTABLE
+	#ifdef __EMSCRIPTEN__
+
+	data_path = "/pk2/";
+
+	#elif defined(PK2_PORTABLE)
 
 	data_path = "." PE_SEP "data" PE_SEP;
 	PUtils::CreateDir(data_path);
@@ -363,6 +371,34 @@ static void log_data() {
 }
 
 int main(int argc, char *argv[]) {
+
+#ifdef __EMSCRIPTEN__
+	// Prepare and populate IDBFS
+	EM_ASM(
+		Module.restore_busy = 1;
+		FS.mkdir("/pk2");
+		FS.mount(IDBFS, {}, "/pk2");
+		console.info("Loading data...");
+		FS.syncfs(true, function (err) {
+			if (err)
+				console.warn("Failed to load data: " + err);
+			else
+				console.info("Data loaded.");
+
+			Module.restore_busy = 0;
+		});
+	);
+
+	printf("Waiting for data to be restored...\n");
+
+	// Sleep until IDBFS is ready
+	while(EM_ASM_INT(
+		return Module.restore_busy;
+	))
+		emscripten_sleep(100);
+
+	printf("Data restoration complete.\n");
+#endif
 
 	read_args(argc, argv);
 	

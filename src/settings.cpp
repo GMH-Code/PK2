@@ -245,9 +245,13 @@ int Settings_Save() {
 	file->write(Settings.sfx_max_volume);
 
 	file->write(Settings.gui);
-	
+
 	file->close();
-	
+
+#ifdef __EMSCRIPTEN__
+	wasm_sync_fs();
+#endif
+
 	PLog::Write(PLog::DEBUG, "PK2", "Saved settings");
 
 	return 0;

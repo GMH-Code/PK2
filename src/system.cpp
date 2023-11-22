@@ -11,6 +11,10 @@
 #include "engine/PRender.hpp"
 #include "settings.hpp"
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <string>
@@ -292,3 +296,18 @@ int Set_Screen_Mode(int mode) {
 	return 0;
 	
 }
+
+#ifdef __EMSCRIPTEN__
+void wasm_sync_fs() {
+	// Sync to IndexedDB in the background
+	EM_ASM(
+		console.info("Saving data...");
+		FS.syncfs(function (err) {
+			if (err)
+				console.warn("Failed to save data: " + err);
+			else
+				console.info("Data saved.");
+		});
+	);
+}
+#endif

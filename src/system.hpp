@@ -85,3 +85,7 @@ void Prepare_DataPath();
 bool FindAsset(PFile::Path* path, const char* default_dir);
 
 int Set_Screen_Mode(int mode);
+
+#ifdef __EMSCRIPTEN__
+void wasm_sync_fs();
+#endif
