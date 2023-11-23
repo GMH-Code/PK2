@@ -129,6 +129,12 @@
           quitElement.innerHTML = status === 0 ? 'Pekka Kana 2 has exited.' : 'Pekka Kana 2 exited with code ' + status;
           quitElement.style.display = 'block';
           canvasElement.style.display = 'none';
+        },
+        qualNearest: () => {
+          canvasElement.style.imageRendering = 'pixelated';
+        },
+        qualLinear: () => {
+          canvasElement.style.imageRendering = null;
         }
       };
       Module.setStatus('Downloading...');

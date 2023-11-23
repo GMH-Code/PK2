@@ -10,6 +10,10 @@
 
 #include <SDL.h>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 void PSdl::load_ui_texture(void* surface) {
 
     ui_surface = (SDL_Surface*)surface;
@@ -55,11 +59,27 @@ void PSdl::set_screen(PRender::FRECT screen_dst) {
 int PSdl::set_shader(int mode) {
 
     if (mode == PRender::SHADER_NEAREST) {
+#ifdef __EMSCRIPTEN__
+        EM_ASM(
+            if (typeof Module.qualNearest === 'function')
+                Module.qualNearest();
+        );
+        return 0;
+#else
         if (SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0") == SDL_TRUE)
             return 0;
+#endif
     } else if (mode == PRender::SHADER_LINEAR) {
+#ifdef __EMSCRIPTEN__
+        EM_ASM(
+            if (typeof Module.qualLinear === 'function')
+                Module.qualLinear();
+        );
+        return 0;
+#else
         if (SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2") == SDL_TRUE)
             return 0;
+#endif
     }
     
     return 1;
