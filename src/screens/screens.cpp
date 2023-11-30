@@ -198,6 +198,14 @@ int Screen_First_Start() {
 //If the screen change
 int Screen_Change() {
 
+#ifdef __EMSCRIPTEN__
+	if (
+		next_screen == SCREEN_INTRO || next_screen == SCREEN_MAP || next_screen == SCREEN_GAME ||
+		(next_screen == SCREEN_MENU && current_screen != SCREEN_GAME)
+	)
+		wasm_switch_fullscreen();
+#endif
+
 	Fade_in(FADE_NORMAL);
 
 	switch (next_screen) {
@@ -226,7 +234,11 @@ int Screen_Loop() {
 	if (PK2_error) return 1;
 	
 	bool keys_move = (current_screen == SCREEN_MAP);
+#ifdef __EMSCRIPTEN__
+	bool relative = false;
+#else
 	bool relative = Settings.isFullScreen;
+#endif
 	PInput::UpdateMouse(keys_move, relative);
 	
 	if (PUtils::Is_Touchscreen())

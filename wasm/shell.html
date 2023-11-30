@@ -129,12 +129,24 @@
           quitElement.innerHTML = status === 0 ? 'Pekka Kana 2 has exited.' : 'Pekka Kana 2 exited with code ' + status;
           quitElement.style.display = 'block';
           canvasElement.style.display = 'none';
+          Module.exitFullscreen();
         },
         qualNearest: () => {
           canvasElement.style.imageRendering = 'pixelated';
         },
         qualLinear: () => {
           canvasElement.style.imageRendering = null;
+        },
+        goFullscreen: () => {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch((err) => {
+              console.info("Cannot switch to fullscreen now:", err.message);
+            });
+          }
+        },
+        exitFullscreen: () => {
+          if (document.fullscreenElement)
+            document.exitFullscreen();
         }
       };
       Module.setStatus('Downloading...');

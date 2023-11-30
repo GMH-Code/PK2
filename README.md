@@ -65,10 +65,7 @@ Pekka Kana 2 is in active development, already has an SDL2 backend, and this for
 Renderer
 --------
 
-There are some differences regarding the display:
-
-- Automatic fullscreen mode is not currently supported, but you can switch your browser into fullscreen mode manually.
-- You can switch between linear and nearest neighbour resampling in the menu, if you prefer a sharper look.  The browser is asked to handle this, and it requires the (supplied) custom HTML template.
+You can switch between linear and nearest neighbour resampling in the menu, if you prefer a sharper look.  The browser is asked to handle this, and it requires the (supplied) custom HTML template.
 
 Audio
 -----

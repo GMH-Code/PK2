@@ -310,4 +310,18 @@ void wasm_sync_fs() {
 		});
 	);
 }
+
+void wasm_switch_fullscreen() {
+	if (Settings.isFullScreen) {
+		EM_ASM(
+			if (typeof Module.goFullscreen === 'function')
+				Module.goFullscreen();
+		);
+	} else {
+		EM_ASM(
+			if (typeof Module.exitFullscreen === 'function')
+				Module.exitFullscreen();
+		);
+	}
+}
 #endif

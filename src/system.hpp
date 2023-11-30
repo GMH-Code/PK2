@@ -88,4 +88,5 @@ int Set_Screen_Mode(int mode);
 
 #ifdef __EMSCRIPTEN__
 void wasm_sync_fs();
+void wasm_switch_fullscreen();
 #endif

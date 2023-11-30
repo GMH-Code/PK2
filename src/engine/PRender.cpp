@@ -108,6 +108,9 @@ void adjust_screen() {
 }
 
 void set_fullscreen(bool set) {
+	#ifdef __EMSCRIPTEN__
+		return;
+	#endif
 
 	#ifdef __ANDROID__
 		SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);

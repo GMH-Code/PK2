@@ -719,8 +719,8 @@ void Draw_Menu_Graphics() {
 
 		if(wasFullScreen != Settings.isFullScreen) {// If fullscreen changes
 #ifdef __EMSCRIPTEN__
-			Settings.isFullScreen = false;
-			save_settings = false;
+			save_settings = true;
+			wasm_switch_fullscreen();
 #else
 			save_settings = true;
 			PRender::set_fullscreen(Settings.isFullScreen);
