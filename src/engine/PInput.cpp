@@ -557,7 +557,7 @@ static int init_controller() {
 		if (SDL_IsGameController(i)) {
 			Controller = SDL_GameControllerOpen(i);
 			if (Controller) {
-				PLog::Write(PLog::DEBUG, "PInput", "Controller found: %s", SDL_GameControllerName(Controller));
+				PLog::Write(PLog::INFO, "PInput", "Controller found: %s", SDL_GameControllerName(Controller));
 				return 0;
 			}
 		}
@@ -568,11 +568,16 @@ static int init_controller() {
 
 }
 
-int init() {
+void RescanControllers() {
 
 	init_haptic();
 	init_controller();
-	
+
+}
+
+int init() {
+
+	RescanControllers();
 	keymap = SDL_GetKeyboardState(NULL);
 
 	return 0;

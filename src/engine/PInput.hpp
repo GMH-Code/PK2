@@ -89,6 +89,7 @@ float GetAxis(int axis);
 void  UpdateMouse(bool keyMove, bool relative);
 bool  MouseLeft();
 bool  MouseRight();
+void  RescanControllers();
 
 int init();
 int update();

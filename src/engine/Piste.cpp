@@ -80,6 +80,8 @@ static void logic() {
 			PInput::InjectText(event.text.text);
 		else if(event.type == SDL_KEYDOWN && PInput::Is_Editing())
 			PInput::InjectKey(event.key.keysym.scancode);
+		else if(event.type == SDL_JOYDEVICEADDED || event.type == SDL_JOYDEVICEREMOVED)
+			PInput::RescanControllers();
 		
 	}
 
@@ -125,12 +127,13 @@ static void sdl_show_version() {
 
 void init(int width, int height, const char* name, const char* icon, int render_method, int audio_buffer_size, bool audio_multi_thread) {
 
-	u32 flags = SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS;
+	u32 flags = SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS | \
+				SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER;
 
 #ifdef __EMSCRIPTEN__
 	SDL_SetHint(SDL_HINT_EMSCRIPTEN_ASYNCIFY, "0");
 #else
-	flags |= SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC | SDL_INIT_GAMECONTROLLER /*| SDL_INIT_SENSOR*/;
+	flags |= SDL_INIT_HAPTIC /*| SDL_INIT_SENSOR*/;
 #endif
 
 	if (SDL_Init(flags) < 0) {

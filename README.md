@@ -21,6 +21,8 @@ This version should run on almost any desktop platform with a modern web browser
 - ChromeOS
 - ...and more
 
+### Keyboard Controls
+
 Use the following keyboard and mouse controls, which can be redefined in the menu:
 
     Left/Right Cursors - Move
@@ -31,6 +33,16 @@ Use the following keyboard and mouse controls, which can be redefined in the men
     Left Alt           - Walk
     Space              - Use item
     Esc                - Open in-game menu
+
+### Gamepad / Joystick Controls
+
+If you want to use a physical game controller, you can toggle this feature on or off in *Controls* > *Use Keyboard* or *Use Game Controller*.
+
+Once enabled, you can then attach and use physical gamepads at any time.  Activate the controller you want to use by pressing a button whilst the game is running.
+
+The primary analogue stick should always move Pekka; the D-Pad and other buttons can be configured in the menu.
+
+### Building the Desktop Version of the Game
 
 If you are interested in building a standalone application, this project should be capable of compiling working desktop apps for Windows and Linux, but this is untested.
 
